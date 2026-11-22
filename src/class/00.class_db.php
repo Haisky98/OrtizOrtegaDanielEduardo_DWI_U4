@@ -12,10 +12,10 @@ if (class_exists('class_db') != true) {
         public function __construct()
         {
             // Parámetros definidos en tu docker-compose.yml
-            $host = 'db';
-            $user = 'mi_usuario';
-            $passwd = 'mi_password';
-            $db = 'proyecto_dwi';
+            $host = getenv('DB_HOST') ?: 'db';
+            $user = getenv('DB_USER') ?: 'mi_usuario';
+            $passwd = getenv('DB_PASSWORD') ?: 'mi_password';
+            $db = getenv('DB_NAME') ?: 'proyecto_dwi';
 
             $this->set_db($host, $user, $passwd, $db);
         }

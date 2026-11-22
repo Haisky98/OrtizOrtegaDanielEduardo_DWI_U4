@@ -7,27 +7,40 @@ services:
       - ./src:/var/www/html
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - app
+      - app1
+      - app2
 
-  app:
+  app1:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     volumes:
       - ./src:/var/www/html
+    env_file:
+      - .env
+
+  app2:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    env_file:
+      - .env
 
   db:
     image: mysql:8.0
     restart: no
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: proyecto_dwi
-      MYSQL_USER: mi_usuario
-      MYSQL_PASSWORD: mi_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./DB:/docker-entrypoint-initdb.d:ro
 
 volumes:
   db_data:
