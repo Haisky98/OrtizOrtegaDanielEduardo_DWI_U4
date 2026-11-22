@@ -16,8 +16,9 @@ if (class_exists('class_db') != true) {
             $user = getenv('DB_USER') ?: 'mi_usuario';
             $passwd = getenv('DB_PASSWORD') ?: 'mi_password';
             $db = getenv('DB_NAME') ?: 'proyecto_dwi';
+            $port = (int)(getenv('DB_PORT') ?: 3306);
 
-            $this->set_db($host, $user, $passwd, $db);
+            $this->set_db($host, $user, $passwd, $db, $port);
         }
 
         public function __destruct()
@@ -25,10 +26,10 @@ if (class_exists('class_db') != true) {
             $this->close_db();
         }
 
-        public function set_db($host, $user, $passwd, $db)
+        public function set_db($host, $user, $passwd, $db, $port = 3306)
         {
             if (!isset($this->db_conn)) {
-                $this->db_conn = mysqli_connect($host, $user, $passwd, $db);
+                $this->db_conn = mysqli_connect($host, $user, $passwd, $db, $port);
                 $this->db_name = $db;
                 if ($this->db_conn) {
                     $this->db_conn->set_charset("utf8mb4");
